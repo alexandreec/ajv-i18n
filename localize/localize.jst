@@ -7,7 +7,7 @@
 }}
 
 {{ var name = 'localize_' + it.locale.replace('-','_'); }}
-module.exports = function {{=name}}(errors) {
+var {{=name}} = function {{=name}}(errors) {
   if (!(errors && errors.length)) return;
   for (var i=0; i<errors.length; i++) {
     var e = errors[i];
@@ -18,11 +18,15 @@ module.exports = function {{=name}}(errors) {
           {{= stripFunction(msg.msgFunc) }}
           break;
       {{~}}
+      case 'errorMessage':
+        {{=name}}(e.params.errors);
+        continue;
       default: continue;
     }
     e.message = out;
   }
 };
+module.exports = {{=name}};
 
 {{
   function stripFunction(code) {
